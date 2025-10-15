@@ -1,0 +1,815 @@
+{% extends "core/base.html" %}
+{% block title %}{{ offre.titre }} - Cabinet Konsey{% endblock %}
+
+{% block content %}
+<style>
+    /* Styles pour la page Détail Offre - Design 3D ultra moderne */
+    :root {
+        --primary-red: #b30000;
+        --dark-black: #111111;
+        --white: #ffffff;
+        --gray-light: #f8f9fa;
+        --shadow-3d: 0 20px 60px rgba(0, 0, 0, 0.15);
+        --shadow-3d-hover: 0 30px 80px rgba(179, 0, 0, 0.25);
+        --gradient-red: linear-gradient(135deg, #b30000 0%, #8b0000 100%);
+        --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        --border-radius: 20px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Hero animé avec particules */
+    .offre-hero {
+        min-height: 35vh;
+        background: var(--gradient-red);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        perspective: 1000px;
+    }
+
+    .offre-hero::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        animation: rotateBackground 20s linear infinite;
+    }
+
+    @keyframes rotateBackground {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .offre-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 2rem;
+        animation: heroZoom 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes heroZoom {
+        from {
+            opacity: 0;
+            transform: scale(0.8) rotateX(-20deg);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) rotateX(0deg);
+        }
+    }
+
+    .offre-hero h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 800;
+        color: var(--white);
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+        animation: titleFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes titleFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+
+    /* Container principal avec perspective */
+    .offre-detail-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+        min-height: 100vh;
+        padding: 5rem 1rem;
+        perspective: 2000px;
+        position: relative;
+    }
+
+    /* Particules flottantes */
+    .particles-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .particle-dot {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--primary-red);
+        border-radius: 50%;
+        opacity: 0.2;
+        animation: floatDot 12s infinite ease-in-out;
+    }
+
+    @keyframes floatDot {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.2;
+        }
+        50% {
+            transform: translate(var(--x), var(--y)) scale(1.8);
+            opacity: 0.5;
+        }
+    }
+
+    .particle-dot:nth-child(1) { left: 15%; top: 25%; --x: 60px; --y: -120px; animation-delay: 0s; }
+    .particle-dot:nth-child(2) { left: 40%; top: 65%; --x: -90px; --y: 100px; animation-delay: 2s; }
+    .particle-dot:nth-child(3) { left: 75%; top: 35%; --x: 110px; --y: -90px; animation-delay: 4s; }
+    .particle-dot:nth-child(4) { left: 85%; top: 75%; --x: -100px; --y: 80px; animation-delay: 6s; }
+    .particle-dot:nth-child(5) { left: 55%; top: 15%; --x: -70px; --y: 140px; animation-delay: 8s; }
+
+    /* Carte principale avec glassmorphism 3D */
+    .offre-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px) saturate(180%);
+        border-radius: var(--border-radius);
+        padding: 3rem;
+        box-shadow: var(--shadow-3d);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: var(--transition);
+        transform-style: preserve-3d;
+        position: relative;
+        z-index: 1;
+        animation: cardEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    }
+
+    @keyframes cardEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(80px) rotateX(-30deg) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg) scale(1);
+        }
+    }
+
+    /* Effet de brillance animé */
+    .offre-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.4) 50%,
+            transparent 70%
+        );
+        transform: rotate(45deg);
+        animation: shimmerSlow 4s infinite;
+    }
+
+    @keyframes shimmerSlow {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .offre-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: var(--shadow-3d-hover);
+    }
+
+    /* Titre avec animation */
+    .offre-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        color: var(--primary-red);
+        margin-bottom: 2rem;
+        text-align: center;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(135deg, var(--primary-red), #8b0000);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: titlePulse 3s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    /* Section infos avec cartes 3D */
+    .offre-info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .info-item {
+        background: linear-gradient(135deg, rgba(179, 0, 0, 0.03), rgba(179, 0, 0, 0.01));
+        border-left: 5px solid var(--primary-red);
+        padding: 1.5rem;
+        border-radius: 15px;
+        transition: var(--transition);
+        transform-style: preserve-3d;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent, rgba(179, 0, 0, 0.05));
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+
+    .info-item:hover::before {
+        transform: translateX(0);
+    }
+
+    .info-item:hover {
+        transform: translateX(10px) rotateY(-3deg);
+        box-shadow: -15px 15px 40px rgba(179, 0, 0, 0.2);
+        border-left-width: 8px;
+    }
+
+    .info-label {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary-red);
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .info-label i {
+        font-size: 1.5rem;
+        animation: iconSpin 4s linear infinite;
+    }
+
+    @keyframes iconSpin {
+        0%, 90% { transform: rotate(0deg); }
+        95% { transform: rotate(15deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    .info-content {
+        color: #333;
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    /* Bouton retour avec effet 3D */
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #555, #333);
+        color: var(--white);
+        border-radius: 50px;
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: var(--transition);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .btn-back::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-back:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-back:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        background: var(--gradient-red);
+        color: var(--white);
+    }
+
+    .btn-back i {
+        transition: var(--transition);
+    }
+
+    .btn-back:hover i {
+        transform: translateX(-8px);
+    }
+
+    /* Section formulaire */
+    .postuler-section {
+        margin-top: 3rem;
+        padding-top: 3rem;
+        border-top: 3px solid rgba(179, 0, 0, 0.1);
+        position: relative;
+        z-index: 1;
+    }
+
+    .postuler-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-red);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .postuler-title i {
+        font-size: 2.5rem;
+        animation: iconBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes iconBounce {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(10deg); }
+    }
+
+    /* Message de succès avec animation */
+    .success-msg {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: var(--white);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+        animation: successPop 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes successPop {
+        0% {
+            opacity: 0;
+            transform: scale(0.5) rotate(-10deg);
+        }
+        60% {
+            transform: scale(1.1) rotate(5deg);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+
+    .success-msg::before {
+        content: '✓';
+        font-size: 2rem;
+        font-weight: bold;
+        animation: checkmarkSpin 0.8s ease-in-out;
+    }
+
+    @keyframes checkmarkSpin {
+        from { transform: rotate(-360deg) scale(0); }
+        to { transform: rotate(0deg) scale(1); }
+    }
+
+    /* Formulaire avec effets 3D */
+    .postuler-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .postuler-form input,
+    .postuler-form textarea,
+    .postuler-form select {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        border: 2px solid rgba(179, 0, 0, 0.1);
+        border-radius: 12px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.8);
+        transition: var(--transition);
+        transform-style: preserve-3d;
+    }
+
+    .postuler-form input:focus,
+    .postuler-form textarea:focus,
+    .postuler-form select:focus {
+        outline: none;
+        border-color: var(--primary-red);
+        background: var(--white);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(179, 0, 0, 0.15);
+    }
+
+    .postuler-form textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    /* Labels stylisés */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-label {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-label i {
+        color: var(--primary-red);
+    }
+
+    /* Bouton submit ultra moderne */
+    .btn-submit {
+        background: var(--gradient-red);
+        color: var(--white);
+        padding: 1.5rem 3rem;
+        border: none;
+        border-radius: 50px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: 0 10px 30px rgba(179, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 1rem;
+    }
+
+    .btn-submit::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-submit:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-8px) scale(1.05) rotateX(10deg);
+        box-shadow: 0 20px 50px rgba(179, 0, 0, 0.4);
+    }
+
+    .btn-submit:active {
+        transform: translateY(-2px) scale(0.98);
+    }
+
+    .btn-submit i {
+        margin-left: 0.8rem;
+        transition: var(--transition);
+    }
+
+    .btn-submit:hover i {
+        transform: translateX(10px) rotate(45deg);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .offre-hero {
+            min-height: 30vh;
+        }
+
+        .offre-detail-section {
+            padding: 3rem 0.5rem;
+        }
+
+        .offre-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .offre-title {
+            font-size: 1.8rem;
+        }
+
+        .info-item:hover {
+            transform: translateX(5px) rotateY(0deg);
+        }
+
+        .btn-back,
+        .btn-submit {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .offre-card {
+            padding: 1.5rem 1rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+        }
+
+        .postuler-form input,
+        .postuler-form textarea,
+        .postuler-form select {
+            padding: 1rem;
+        }
+    }
+
+    /* Focus pour accessibilité */
+    .btn-submit:focus,
+    .btn-back:focus,
+    .postuler-form input:focus,
+    .postuler-form textarea:focus,
+    .postuler-form select:focus {
+        outline: 3px solid var(--primary-red);
+        outline-offset: 3px;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="offre-hero">
+    <div class="offre-hero-content">
+        <h1>{{ offre.titre }}</h1>
+    </div>
+</div>
+
+<!-- Section Détails -->
+<section class="offre-detail-section">
+    <!-- Particules en arrière-plan -->
+    <div class="particles-bg">
+        <div class="particle-dot"></div>
+        <div class="particle-dot"></div>
+        <div class="particle-dot"></div>
+        <div class="particle-dot"></div>
+        <div class="particle-dot"></div>
+    </div>
+
+    <div class="offre-card">
+        <!-- Bouton retour -->
+        <a href="{% url 'offres_list' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+
+        <!-- Titre -->
+        <h1 class="offre-title">{{ offre.titre }}</h1>
+
+        <!-- Infos de l'offre -->
+        <div class="offre-info-grid">
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-map-marker-alt"></i> Localisation
+                </div>
+                <div class="info-content">{{ offre.localisation }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-file-alt"></i> Description
+                </div>
+                <div class="info-content">{{ offre.description }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-user-tie"></i> Profil recherché
+                </div>
+                <div class="info-content">{{ offre.profil_recherche }}</div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">
+                    <i class="fas fa-calendar-alt"></i> Date limite
+                </div>
+                <div class="info-content">{{ offre.date_limite|date:"d/m/Y" }}</div>
+            </div>
+        </div>
+
+        <!-- Section formulaire de candidature -->
+        <div class="postuler-section">
+            <h2 class="postuler-title">
+                <i class="fas fa-paper-plane"></i> Postuler à cette offre
+            </h2>
+
+            {% if success %}
+            <div class="success-msg">
+                Votre candidature a bien été envoyée ! Nous vous contacterons bientôt.
+            </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" class="postuler-form">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group">
+                    <label class="form-label" for="{{ field.id_for_label }}">
+                        {% if 'nom' in field.name or 'prenom' in field.name %}
+                            <i class="fas fa-user"></i>
+                        {% elif 'email' in field.name %}
+                            <i class="fas fa-envelope"></i>
+                        {% elif 'telephone' in field.name or 'tel' in field.name %}
+                            <i class="fas fa-phone"></i>
+                        {% elif 'message' in field.name or 'motivation' in field.name %}
+                            <i class="fas fa-comment"></i>
+                        {% elif 'cv' in field.name %}
+                            <i class="fas fa-file-upload"></i>
+                        {% else %}
+                            <i class="fas fa-pen"></i>
+                        {% endif %}
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="field-error">{{ field.errors.0 }}</span>
+                    {% endif %}
+                    {% if field.help_text %}
+                        <small class="field-help">{{ field.help_text }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn-submit">
+                    Envoyer ma candidature <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Animations et interactions avancées
+    document.addEventListener('DOMContentLoaded', function() {
+        // Effet 3D sur la carte au mouvement de la souris
+        const card = document.querySelector('.offre-card');
+        
+        card.addEventListener('mousemove', function(e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 30;
+            const rotateY = (centerX - x) / 30;
+            
+            card.style.transform = `translateY(-10px) scale(1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            card.style.transform = 'translateY(0) scale(1) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // Animation des info-items au scroll
+        const infoItems = document.querySelectorAll('.info-item');
+        
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(0) rotateY(0deg)';
+                }
+            });
+        }, observerOptions);
+
+        infoItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-50px) rotateY(-10deg)';
+            item.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            observer.observe(item);
+        });
+
+        // Validation en temps réel avec feedback visuel
+        const inputs = document.querySelectorAll('.postuler-form input, .postuler-form textarea, .postuler-form select');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = '#28a745';
+                    this.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.2)';
+                } else if (this.hasAttribute('required')) {
+                    this.style.borderColor = '#dc3545';
+                    this.style.boxShadow = '0 0 20px rgba(220, 53, 69, 0.2)';
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary-red)';
+                this.style.boxShadow = '0 15px 40px rgba(179, 0, 0, 0.15)';
+            });
+        });
+
+        // Effet ripple sur le bouton submit
+        const submitBtn = document.querySelector('.btn-submit');
+        
+        submitBtn.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            ripple.style.animation = 'rippleEffect 0.6s ease-out';
+            
+            const rect = submitBtn.getBoundingClientRect();
+            ripple.style.left = (e.clientX - rect.left - 10) + 'px';
+            ripple.style.top = (e.clientY - rect.top - 10) + 'px';
+            
+            submitBtn.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Animation de progression pour le téléchargement de fichier
+        const fileInput = document.querySelector('input[type="file"]');
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const fileName = this.files[0].name;
+                    const fileSize = (this.files[0].size / 1024).toFixed(2);
+                    
+                    this.style.borderColor = '#28a745';
+                    this.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.3)';
+                    
+                    console.log(`Fichier sélectionné: ${fileName} (${fileSize} KB)`);
+                }
+            });
+        }
+    });
+
+    // Animation de ripple CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes rippleEffect {
+            to {
+                width: 400px;
+                height: 400px;
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}

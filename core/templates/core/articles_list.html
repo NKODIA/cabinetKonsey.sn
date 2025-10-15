@@ -1,0 +1,713 @@
+{% extends "core/base.html" %}
+
+{% block title %}Articles - Cabinet Konsey{% endblock %}
+
+{% block content %}
+<style>
+    /* Styles pour la page Articles - Design moderne et responsive */
+    :root {
+        --primary-red: #b30000;
+        --dark-black: #111111;
+        --white: #ffffff;
+        --gray-light: #f8f9fa;
+        --gray-medium: #e9ecef;
+        --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 15px 40px rgba(179, 0, 0, 0.2);
+        --gradient-red: linear-gradient(135deg, var(--primary-red), rgba(179, 0, 0, 0.8));
+        --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        --border-radius: 12px;
+    }
+
+    /* Reset */
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Hero Section Articles */
+    .articles-hero {
+        min-height: 40vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 5rem 1rem 3rem;
+        background: var(--gradient-red);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .articles-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: 0;
+    }
+
+    .articles-hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .articles-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        color: var(--white);
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: fadeInDown 0.8s ease;
+    }
+
+    .articles-underline {
+        width: 100px;
+        height: 4px;
+        background: var(--white);
+        margin: 0 auto 2rem;
+        border-radius: 2px;
+        animation: expandWidth 1s ease 0.3s both;
+    }
+
+    .articles-subtitle {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.8;
+        max-width: 700px;
+        margin: 0 auto;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes expandWidth {
+        from { width: 0; }
+        to { width: 100px; }
+    }
+
+    @keyframes cardAppear {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Container principal */
+    .articles-container {
+        background: linear-gradient(to bottom, var(--gray-light) 0%, var(--white) 100%);
+        padding: 5rem 1rem;
+        min-height: 60vh;
+    }
+
+    /* Grid des articles */
+    .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    /* Carte article individuelle */
+    .article-card {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+        transition: var(--transition);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(179, 0, 0, 0.08);
+        opacity: 0;
+        animation: cardAppear 0.6s ease forwards;
+    }
+
+    /* Stagger animation */
+    .article-card:nth-child(1) { animation-delay: 0.1s; }
+    .article-card:nth-child(2) { animation-delay: 0.15s; }
+    .article-card:nth-child(3) { animation-delay: 0.2s; }
+    .article-card:nth-child(4) { animation-delay: 0.25s; }
+    .article-card:nth-child(5) { animation-delay: 0.3s; }
+    .article-card:nth-child(6) { animation-delay: 0.35s; }
+    .article-card:nth-child(7) { animation-delay: 0.4s; }
+    .article-card:nth-child(8) { animation-delay: 0.45s; }
+    .article-card:nth-child(9) { animation-delay: 0.5s; }
+    .article-card:nth-child(n+10) { animation-delay: 0.55s; }
+
+    .article-card:hover {
+        transform: translateY(-12px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* Container image */
+    .article-img-container {
+        position: relative;
+        width: 100%;
+        height: 250px;
+        overflow: hidden;
+        background: var(--gray-medium);
+    }
+
+    .article-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+        filter: brightness(0.95);
+    }
+
+    .article-card:hover .article-card-img {
+        transform: scale(1.1);
+        filter: brightness(1.05);
+    }
+
+    /* Placeholder image */
+    .placeholder-image {
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* Overlay gradient sur image */
+    .article-img-container::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(17, 17, 17, 0.6) 0%, transparent 100%);
+        pointer-events: none;
+    }
+
+    /* Badge catégorie */
+    .article-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(179, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        color: var(--white);
+        padding: 0.4rem 0.9rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(179, 0, 0, 0.3);
+        z-index: 2;
+    }
+
+    /* Contenu de la carte */
+    .article-card-content {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .article-card-content h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1.2rem, 2vw, 1.4rem);
+        color: var(--dark-black);
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Métadonnées */
+    .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .article-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .article-meta-item i {
+        color: var(--primary-red);
+        font-size: 0.9rem;
+    }
+
+    .article-card-content small {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    /* Texte aperçu */
+    .article-card-content p {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Bouton lire la suite */
+    .btn-article {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.875rem 1.75rem;
+        background: var(--gradient-red);
+        color: var(--white);
+        text-decoration: none;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(179, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+        align-self: flex-start;
+    }
+
+    .btn-article::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-article:hover::before {
+        left: 100%;
+    }
+
+    .btn-article:hover {
+        background: linear-gradient(135deg, #900000, var(--primary-red));
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(179, 0, 0, 0.35);
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .btn-article i {
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .btn-article:hover i {
+        transform: translateX(5px);
+    }
+
+    /* Message "Aucun article" */
+    .no-content {
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.2rem;
+        color: #555;
+        font-style: italic;
+        margin-top: 3rem;
+        padding: 3rem 2rem;
+        background: rgba(179, 0, 0, 0.03);
+        border-radius: var(--border-radius);
+        border: 2px dashed rgba(179, 0, 0, 0.2);
+        max-width: 600px;
+        margin: 3rem auto;
+    }
+
+    .no-content i {
+        font-size: 3rem;
+        color: var(--primary-red);
+        margin-bottom: 1rem;
+        display: block;
+        opacity: 0.5;
+    }
+
+    /* Section CTA */
+    .articles-cta {
+        max-width: 800px;
+        margin: 5rem auto 0;
+        padding: 3rem 2rem;
+        background: rgba(179, 0, 0, 0.05);
+        border: 2px solid rgba(179, 0, 0, 0.1);
+        border-radius: var(--border-radius);
+        text-align: center;
+        animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .articles-cta h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        color: var(--primary-red);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .articles-cta p {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1rem, 2vw, 1.1rem);
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+
+    .btn-cta-large {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.2rem 2.5rem;
+        background: var(--gradient-red);
+        color: var(--white);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        box-shadow: 0 6px 20px rgba(179, 0, 0, 0.3);
+    }
+
+    .btn-cta-large:hover {
+        background: linear-gradient(135deg, #900000, var(--primary-red));
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 10px 30px rgba(179, 0, 0, 0.4);
+        color: var(--white);
+        text-decoration: none;
+    }
+
+    .btn-cta-large i {
+        margin-right: 0.75rem;
+        font-size: 1.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .articles-grid {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .articles-hero {
+            min-height: 35vh;
+            padding: 4rem 1rem 2.5rem;
+        }
+
+        .articles-container {
+            padding: 3rem 0.5rem;
+        }
+
+        .articles-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .article-img-container {
+            height: 200px;
+        }
+
+        .article-card-content {
+            padding: 1.25rem;
+        }
+
+        .btn-article {
+            width: 100%;
+        }
+
+        .articles-cta {
+            margin-top: 3rem;
+            padding: 2rem 1.5rem;
+        }
+
+        .btn-cta-large {
+            width: 100%;
+            max-width: 350px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .articles-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .article-img-container {
+            height: 220px;
+        }
+
+        .articles-title {
+            font-size: 2rem;
+        }
+
+        .articles-underline {
+            width: 80px;
+        }
+
+        .article-card-content {
+            padding: 1rem;
+        }
+
+        .articles-cta {
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+        }
+    }
+
+    /* Focus pour accessibilité */
+    .btn-article:focus,
+    .btn-cta-large:focus {
+        outline: 3px solid var(--primary-red);
+        outline-offset: 3px;
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="articles-hero">
+    <div class="articles-hero-content">
+        <h1 class="articles-title" data-fr="Astuces & Conseils" data-en="Tips & Advice">Astuces & Conseils</h1>
+        <div class="articles-underline"></div>
+        <p class="articles-subtitle" data-fr="Découvrez nos articles, conseils juridiques et ressources RH pour optimiser la gestion de votre entreprise au quotidien." data-en="Discover our articles, legal advice and HR resources to optimize your daily business management.">
+            Découvrez nos articles, conseils juridiques et ressources RH pour optimiser la gestion de votre entreprise au quotidien.
+        </p>
+    </div>
+</div>
+
+<!-- Section Articles -->
+<div class="articles-container">
+    {% if articles %}
+        <div class="articles-grid">
+            {% for article in articles %}
+                <article class="article-card">
+                    <div class="article-img-container">
+                        {% if article.category %}
+                            <span class="article-badge">{{ article.category }}</span>
+                        {% endif %}
+                        {% if article.image %}
+                            <img src="{{ article.image.url }}" alt="{{ article.titre }}" class="article-card-img" loading="lazy">
+                        {% else %}
+                            <div class="placeholder-image article-card-img" style="background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                        {% endif %}
+                    </div>
+                    <div class="article-card-content">
+                        <h2>{{ article.titre }}</h2>
+                        
+                        <div class="article-meta">
+                            <span class="article-meta-item">
+                                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                {{ article.published_date|date:"d M Y" }}
+                            </span>
+                            {% if article.author %}
+                                <span class="article-meta-item">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    {{ article.author }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <p>{{ article.contenu|truncatewords:25 }}</p>
+                        
+                        <a href="{% url 'article_detail' article.slug %}" class="btn-article" data-fr="Lire la suite" data-en="Read more">
+                            Lire la suite <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <!-- CTA Section -->
+        <div class="articles-cta">
+            <h2 data-fr="Besoin de conseils personnalisés ?" data-en="Need personalized advice?">Besoin de conseils personnalisés ?</h2>
+            <p data-fr="Notre équipe d'experts est à votre disposition pour vous accompagner dans vos problématiques juridiques et RH." data-en="Our team of experts is at your disposal to support you with your legal and HR issues.">
+                Notre équipe d'experts est à votre disposition pour vous accompagner dans vos problématiques juridiques et RH.
+            </p>
+            <a href="{% url 'contact' %}" class="btn-cta-large">
+                <i class="fas fa-comments"></i> <span data-fr="Contactez nos experts" data-en="Contact our experts">Contactez nos experts</span>
+            </a>
+        </div>
+    {% else %}
+        <div class="no-content">
+            <i class="fas fa-newspaper" aria-hidden="true"></i>
+            <span data-fr="Aucun article disponible pour le moment." data-en="No articles available at the moment.">Aucun article disponible pour le moment.</span><br>
+            <span data-fr="Revenez bientôt pour découvrir nos derniers conseils !" data-en="Come back soon to discover our latest tips!">Revenez bientôt pour découvrir nos derniers conseils !</span>
+        </div>
+
+        <!-- CTA même sans articles -->
+        <div class="articles-cta">
+            <h2 data-fr="Une question spécifique ?" data-en="A specific question?">Une question spécifique ?</h2>
+            <p data-fr="N'hésitez pas à nous contacter pour obtenir des réponses adaptées à votre situation." data-en="Feel free to contact us for answers tailored to your situation.">
+                N'hésitez pas à nous contacter pour obtenir des réponses adaptées à votre situation.
+            </p>
+            <a href="{% url 'contact' %}" class="btn-cta-large">
+                <i class="fas fa-envelope"></i> <span data-fr="Nous contacter" data-en="Contact us">Nous contacter</span>
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    // Animations au scroll et interactions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Appliquer la traduction aux éléments de la page
+        if (typeof updateLanguage === 'function') {
+            updateLanguage();
+        }
+
+        // Intersection Observer pour animations au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes articles
+        const cards = document.querySelectorAll('.article-card');
+        cards.forEach(card => observer.observe(card));
+
+        // Smooth scroll pour les liens internes
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Temps de lecture estimé (optionnel)
+        cards.forEach(card => {
+            const textElement = card.querySelector('p');
+            if (textElement) {
+                const text = textElement.textContent;
+                const wordCount = text.trim().split(/\s+/).length;
+                const readingTime = Math.ceil(wordCount / 200); // 200 mots/min
+                
+                if (readingTime > 0) {
+                    const meta = card.querySelector('.article-meta');
+                    if (meta) {
+                        const timeItem = document.createElement('span');
+                        timeItem.className = 'article-meta-item';
+                        timeItem.innerHTML = `<i class="fas fa-clock" aria-hidden="true"></i> ${readingTime} min`;
+                        meta.appendChild(timeItem);
+                    }
+                }
+            }
+        });
+
+        // Mettre à jour les boutons "Lire la suite" avec la traduction
+        const readMoreButtons = document.querySelectorAll('.btn-article');
+        readMoreButtons.forEach(btn => {
+            const currentLang = localStorage.getItem('language') || 'fr';
+            const frText = btn.getAttribute('data-fr');
+            const enText = btn.getAttribute('data-en');
+            const arrow = btn.querySelector('i');
+            
+            if (currentLang === 'en' && enText) {
+                btn.innerHTML = enText + ' ';
+                btn.appendChild(arrow);
+            } else if (frText) {
+                btn.innerHTML = frText + ' ';
+                btn.appendChild(arrow);
+            }
+        });
+    });
+
+    // Écouter les changements de langue
+    if (typeof languageSwitcher !== 'undefined') {
+        const originalToggle = window.toggleLanguage;
+        window.toggleLanguage = function() {
+            if (originalToggle) originalToggle();
+            
+            // Mettre à jour les boutons après le changement de langue
+            setTimeout(() => {
+                const readMoreButtons = document.querySelectorAll('.btn-article');
+                readMoreButtons.forEach(btn => {
+                    const currentLang = localStorage.getItem('language') || 'fr';
+                    const frText = btn.getAttribute('data-fr');
+                    const enText = btn.getAttribute('data-en');
+                    const arrow = btn.querySelector('i') || document.createElement('i');
+                    arrow.className = 'fas fa-arrow-right';
+                    
+                    if (currentLang === 'en' && enText) {
+                        btn.innerHTML = enText + ' ';
+                        btn.appendChild(arrow);
+                    } else if (frText) {
+                        btn.innerHTML = frText + ' ';
+                        btn.appendChild(arrow);
+                    }
+                });
+            }, 100);
+        };
+    }
+</script>
+{% endblock %}

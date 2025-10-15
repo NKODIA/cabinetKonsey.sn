@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+msgid "Articles - Cabinet Konsey"
+msgstr "Articles - Cabinet Konsey"
+
+msgid "Astuces & Conseils"
+msgstr "Tips & Advice"
+
+msgid "Découvrez nos articles, conseils juridiques et ressources RH pour optimiser la gestion de votre entreprise au quotidien."
+msgstr "Discover our articles, legal advice and HR resources to optimize your daily business management."
+
+msgid "Lire l'article"
+msgstr "Read the article"
+
+msgid "Lire la suite"
+msgstr "Read more"
+
+msgid "Besoin de conseils personnalisés ?"
+msgstr "Need personalized advice?"
+
+msgid "Notre équipe d'experts est à votre disposition pour vous accompagner dans vos problématiques juridiques et RH."
+msgstr "Our team of experts is at your disposal to support you with your legal and HR issues."
+
+msgid "Contactez nos experts"
+msgstr "Contact our experts"
+
+msgid "Aucun article disponible pour le moment."
+msgstr "No articles available at the moment."
+
+msgid "Revenez bientôt pour découvrir nos derniers conseils !"
+msgstr "Come back soon to discover our latest tips!"
+
+msgid "Une question spécifique ?"
+msgstr "A specific question?"
+
+msgid "N'hésitez pas à nous contacter pour obtenir des réponses adaptées à votre situation."
+msgstr "Feel free to contact us for answers tailored to your situation."
+
+msgid "Nous poser une question"
+msgstr "Ask us a question"
+
+msgid "Nous contacter"
+msgstr "Contact us"

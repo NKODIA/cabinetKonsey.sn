@@ -1,0 +1,1062 @@
+// {% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Cabinet Konsey{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Font Awesome 6 pour icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        /* Thème global: Rouge/Noir/Blanc */
+        :root {
+            --primary-red: #b30000;
+            --dark-black: #111111;
+            --white: #ffffff;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            background-color: var(--white);
+            color: var(--dark-black);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar compacte */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background-color: var(--white) !important;
+            padding: 0.3rem 0;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+        }
+
+        /* Centrage de la navigation */
+        .navbar .container-fluid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Liens de navigation - mieux espacés */
+        .navbar-collapse {
+            flex-grow: 0;
+        }
+
+        .navbar-nav {
+            gap: 0.5rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--dark-black) !important;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem !important;
+            transition: var(--transition);
+            border-radius: 8px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: var(--primary-red) !important;
+            background-color: rgba(179, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .navbar-brand {
+            margin-right: auto;
+        }
+
+        /* Bouton de traduction */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary-red), #8b0000);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(179, 0, 0, 0.3);
+        }
+
+        .language-switcher:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.5);
+        }
+
+        .language-switcher i {
+            color: white;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .language-switcher:hover i {
+            transform: rotate(180deg);
+        }
+
+        .language-flag {
+            width: 28px;
+            height: 20px;
+            border-radius: 3px;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .language-switcher:hover .language-flag {
+            transform: scale(1.1);
+        }
+
+        .language-text {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        /* Version mobile du bouton langue */
+        @media (max-width: 991px) {
+            .language-switcher {
+                margin: 1rem 0;
+                justify-content: center;
+            }
+        }
+
+        /* Bouton toggler avec animation */
+        .navbar-toggler {
+            border-color: var(--primary-red);
+            color: var(--dark-black);
+            position: relative;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+        }
+
+        .navbar-toggler-icon {
+            background-image: none;
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Animation hamburger 3D */
+        .navbar-toggler-icon::before,
+        .navbar-toggler-icon::after,
+        .navbar-toggler-icon span {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 3px;
+            background-color: var(--dark-black);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .navbar-toggler-icon::before {
+            top: 15px;
+        }
+
+        .navbar-toggler-icon span {
+            top: 23px;
+        }
+
+        .navbar-toggler-icon::after {
+            top: 31px;
+        }
+
+        /* Animation X quand ouvert */
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+            top: 23px;
+            transform: translateX(-50%) rotate(45deg);
+            background-color: var(--primary-red);
+        }
+
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon span {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+            top: 23px;
+            transform: translateX(-50%) rotate(-45deg);
+            background-color: var(--primary-red);
+        }
+
+        /* Animation 3D du menu mobile */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                perspective: 1000px;
+            }
+
+            .navbar-nav {
+                transform-origin: top;
+                animation: slideDown 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: rotateX(-90deg) translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: rotateX(0) translateY(0);
+                }
+            }
+
+            .navbar-nav .nav-item {
+                opacity: 0;
+                animation: fadeInItem 0.4s ease forwards;
+            }
+
+            .navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+            .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.15s; }
+            .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.2s; }
+            .navbar-nav .nav-item:nth-child(4) { animation-delay: 0.25s; }
+            .navbar-nav .nav-item:nth-child(5) { animation-delay: 0.3s; }
+            .navbar-nav .nav-item:nth-child(6) { animation-delay: 0.35s; }
+
+            @keyframes fadeInItem {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .navbar-nav .nav-link {
+                margin: 0.5rem 0;
+                padding: 1rem !important;
+                border-left: 3px solid transparent;
+                transition: all 0.3s ease;
+            }
+
+            .navbar-nav .nav-link:hover {
+                border-left-color: var(--primary-red);
+                padding-left: 1.5rem !important;
+                transform: translateX(5px);
+            }
+        }
+
+        /* Main / contenu juste sous navbar */
+        main {
+            padding: 0;
+            margin: 0;
+            min-height: auto;
+        }
+
+        /* Bouton WhatsApp flottant */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 4px 4px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        .whatsapp-tooltip {
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--dark-black);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .whatsapp-float:hover .whatsapp-tooltip {
+            opacity: 1;
+            visibility: visible;
+            right: 75px;
+        }
+
+        /* Bouton Scroll to Top */
+        #scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary-red), #8b0000);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(179, 0, 0, 0.4);
+            z-index: 997;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        #scroll-to-top.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0) translateY(100px);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) translateY(0);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        #scroll-to-top:hover {
+            background: linear-gradient(135deg, #8b0000, var(--primary-red));
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(179, 0, 0, 0.6);
+        }
+
+        #scroll-to-top i {
+            animation: arrowBounce 2s infinite;
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 300;
+            box-shadow: var(--shadow-soft);
+        }
+
+        footer a {
+            color: var(--primary-red);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* Modal Cookies moderne */
+        #cookie-modal {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 500px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        #cookie-modal.show {
+            display: block;
+        }
+
+        .cookie-header {
+            background: linear-gradient(135deg, var(--primary-red), #900000);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .cookie-header i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .cookie-header h3 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .cookie-body {
+            padding: 25px;
+        }
+
+        .cookie-body p {
+            margin: 0 0 20px 0;
+            color: var(--dark-black);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cookie-btn-accept {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        .cookie-btn-accept:hover {
+            background-color: #900000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 0, 0, 0.3);
+        }
+
+        .cookie-btn-refuse {
+            background-color: #e0e0e0;
+            color: var(--dark-black);
+        }
+
+        .cookie-btn-refuse:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .cookie-btn-settings {
+            background-color: var(--dark-black);
+            color: white;
+            flex-basis: 100%;
+        }
+
+        .cookie-btn-settings:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+
+        .cookie-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary-red);
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .cookie-link:hover {
+            color: #900000;
+            text-decoration: underline;
+        }
+
+        /* Modal paramètres cookies */
+        #cookie-settings-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        #cookie-settings-modal.show {
+            display: block;
+            animation: fadeInScale 0.3s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .cookie-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+        }
+
+        .cookie-overlay.show {
+            display: block;
+        }
+
+        .settings-header {
+            background: var(--dark-black);
+            color: white;
+            padding: 25px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .settings-header h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .settings-body {
+            padding: 25px;
+        }
+
+        .cookie-category {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .cookie-category:hover {
+            border-color: var(--primary-red);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .category-header h4 {
+            margin: 0;
+            color: var(--dark-black);
+            font-size: 18px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-red);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        input:disabled + .toggle-slider {
+            background-color: var(--primary-red);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .category-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .settings-footer {
+            padding: 20px 25px;
+            background: #f8f8f8;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .navbar .container-fluid {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand .logo img {
+                height: 50px;
+            }
+
+            main {
+                padding: 1rem 0;
+            }
+
+            footer {
+                padding: 1.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+                bottom: 90px;
+                right: 20px;
+            }
+
+            .whatsapp-tooltip {
+                display: none;
+            }
+
+            #scroll-to-top {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            #cookie-modal {
+                bottom: 10px;
+                width: 95%;
+            }
+
+            .cookie-buttons {
+                flex-direction: column;
+            }
+
+            .cookie-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER / NAVBAR -->
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand logo" href="{% url 'home' %}">
+                    <img src="{% static 'core/image/logok.png' %}" alt="Logo" height="75">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"><span></span></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}" data-fr="Accueil" data-en="Home">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'services' %}" data-fr="Services" data-en="Services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'offres_list' %}" data-fr="Offres d'emploi" data-en="Job Offers">Offres d'emploi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'articles_list' %}" data-fr="Articles" data-en="Articles">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contact' %}" data-fr="Contact" data-en="Contact">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Bouton de traduction -->
+                    <div class="language-switcher" id="languageSwitcher" onclick="toggleLanguage()">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 600'%3E%3Crect width='900' height='600' fill='%23ED2939'/%3E%3Crect width='600' height='600' fill='%23fff'/%3E%3Crect width='300' height='600' fill='%23002395'/%3E%3C/svg%3E" alt="FR" class="language-flag" id="langFlag">
+                        <span class="language-text" id="langText">FR</span>
+                        <i class="fas fa-globe"></i>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container-fluid">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto">
+        <div class="container">
+            <p data-fr="© {% now 'Y' %} CABINET KONSEY SAS — Droit & RH, unis pour votre performance" 
+               data-en="© {% now 'Y' %} CABINET KONSEY SAS — Law & HR, united for your performance">
+               &copy; {% now "Y" %} CABINET KONSEY SAS — Droit & RH, unis pour votre performance
+            </p>
+            <p>
+                <span data-fr="Adresse:" data-en="Address:">Adresse:</span> 18255 Dakar-Sénégal | 
+                <a href="mailto:contact@cabinetkonsey.sn">
+                    <i class="fas fa-envelope me-1"></i>contact@cabinetkonsey.sn
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- BOUTON WHATSAPP FLOTTANT -->
+    <a href="https://wa.me/221703298912?text=Bonjour,%20je%20souhaite%20parler%20à%20un%20conseiller" target="_blank" class="whatsapp-float" aria-label="Contacter via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip" data-fr="Parler à un conseiller" data-en="Talk to an advisor">Parler à un conseiller</span>
+    </a>
+
+    <!-- BOUTON SCROLL TO TOP -->
+    <button id="scroll-to-top" aria-label="Retour en haut">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- MODAL COOKIES PRINCIPALE -->
+    <div id="cookie-modal">
+        <div class="cookie-header">
+            <i class="fas fa-cookie-bite"></i>
+            <h3 data-fr="Respect de votre vie privée" data-en="Privacy Respect">Respect de votre vie privée</h3>
+        </div>
+        <div class="cookie-body">
+            <p data-fr="Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic du site et personnaliser le contenu." 
+               data-en="We use cookies to improve your browsing experience, analyze site traffic and personalize content.">
+               Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic du site et personnaliser le contenu.
+            </p>
+            <div class="cookie-buttons">
+                <button id="accept-all-cookies" class="cookie-btn cookie-btn-accept">
+                    <i class="fas fa-check"></i> <span data-fr="Tout accepter" data-en="Accept All">Tout accepter</span>
+                </button>
+                <button id="refuse-all-cookies" class="cookie-btn cookie-btn-refuse">
+                    <i class="fas fa-times"></i> <span data-fr="Tout refuser" data-en="Refuse All">Tout refuser</span>
+                </button>
+                <button id="open-cookie-settings" class="cookie-btn cookie-btn-settings">
+                    <i class="fas fa-cog"></i> <span data-fr="Personnaliser" data-en="Customize">Personnaliser</span>
+                </button>
+            </div>
+            <a href="{% url 'mentions_legales' %}" class="cookie-link">
+                <i class="fas fa-shield-alt"></i> <span data-fr="Lire notre politique de confidentialité" data-en="Read our privacy policy">Lire notre politique de confidentialité</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- OVERLAY POUR MODAL PARAMÈTRES -->
+    <div class="cookie-overlay" id="cookie-overlay"></div>
+
+    <!-- MODAL PARAMÈTRES COOKIES -->
+    <div id="cookie-settings-modal">
+        <div class="settings-header">
+            <h3><i class="fas fa-sliders-h"></i> <span data-fr="Paramètres des cookies" data-en="Cookie Settings">Paramètres des cookies</span></h3>
+        </div>
+        <div class="settings-body">
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4><i class="fas fa-shield-alt"></i> <span data-fr="Cookies essentiels" data-en="Essential Cookies">Cookies essentiels</span></h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked disabled>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <p class="category-description" data-fr="Ces cookies sont nécessaires au fonctionnement du site et ne peuvent pas être désactivés. Ils sont généralement établis en réponse à des actions que vous effectuez." data-en="These cookies are necessary for the site to function and cannot be disabled. They are generally set in response to actions you take.">Ces cookies sont nécessaires au fonctionnement du site et ne peuvent pas être désactivés. Ils sont généralement établis en réponse à des actions que vous effectuez.</p>
+            </div>
+
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4><i class="fas fa-chart-line"></i> <span data-fr="Cookies analytiques" data-en="Analytics Cookies">Cookies analytiques</span></h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="analytics-cookies">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <p class="category-description" data-fr="Ces cookies nous permettent de compter les visites et les sources de trafic afin de mesurer et d'améliorer les performances de notre site." data-en="These cookies allow us to count visits and traffic sources to measure and improve our site's performance.">Ces cookies nous permettent de compter les visites et les sources de trafic afin de mesurer et d'améliorer les performances de notre site.</p>
+            </div>
+
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h4><i class="fas fa-bullseye"></i> <span data-fr="Cookies marketing" data-en="Marketing Cookies">Cookies marketing</span></h4>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="marketing-cookies">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <p class="category-description" data-fr="Ces cookies peuvent être installés par nos partenaires publicitaires pour créer un profil de vos intérêts et vous montrer des annonces pertinentes." data-en="These cookies may be set by our advertising partners to create a profile of your interests and show you relevant ads.">Ces cookies peuvent être installés par nos partenaires publicitaires pour créer un profil de vos intérêts et vous montrer des annonces pertinentes.</p>
+            </div>
+        </div>
+        <div class="settings-footer">
+            <button id="cancel-settings" class="cookie-btn cookie-btn-refuse">
+                <i class="fas fa-times"></i> <span data-fr="Annuler" data-en="Cancel">Annuler</span>
+            </button>
+            <button id="save-settings" class="cookie-btn cookie-btn-accept">
+                <i class="fas fa-save"></i> <span data-fr="Enregistrer" data-en="Save">Enregistrer</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- JS principal -->
+    <script src="{% static 'core/scripts/main.js' %}"></script>
+
+    <!-- Script de traduction -->
+    <script>
+        // Système de traduction
+        let currentLang = localStorage.getItem('language') || 'fr';
+        
+        // Drapeaux en SVG base64
+        const flags = {
+            fr: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 600'%3E%3Crect width='900' height='600' fill='%23ED2939'/%3E%3Crect width='600' height='600' fill='%23fff'/%3E%3Crect width='300' height='600' fill='%23002395'/%3E%3C/svg%3E",
+            en: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3CclipPath id='t'%3E%3Cpath d='M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z'/%3E%3C/clipPath%3E%3Cpath d='M0,0 v30 h60 v-30 z' fill='%2300247d'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0,0 L60,30 M60,0 L0,30' clip-path='url(%23t)' stroke='%23cf142b' stroke-width='4'/%3E%3Cpath d='M30,0 v30 M0,15 h60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30,0 v30 M0,15 h60' stroke='%23cf142b' stroke-width='6'/%3E%3C/svg%3E"
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            localStorage.setItem('language', currentLang);
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const langFlag = document.getElementById('langFlag');
+            const langText = document.getElementById('langText');
+            
+            // Mettre à jour le bouton de langue
+            langFlag.src = flags[currentLang];
+            langText.textContent = currentLang.toUpperCase();
+            
+            // Mettre à jour tous les éléments avec data-fr et data-en
+            document.querySelectorAll('[data-fr][data-en]').forEach(element => {
+                const text = element.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    // Pour les liens de navigation et éléments simples
+                    if (element.tagName === 'A' || element.tagName === 'SPAN' || element.tagName === 'P' || element.tagName === 'H3' || element.tagName === 'H4') {
+                        element.textContent = text;
+                    } else {
+                        element.innerHTML = text;
+                    }
+                }
+            });
+
+            // Mettre à jour l'attribut lang du HTML
+            document.documentElement.lang = currentLang;
+        }
+
+        // Appliquer la langue au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            updateLanguage();
+        });
+    </script>
+
+    <!-- Script de gestion des cookies -->
+    <script>
+        // Gestion des cookies
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Vérifier si l'utilisateur a déjà accepté/refusé les cookies
+        window.addEventListener('load', function() {
+            const cookieConsent = getCookie('cookie_consent');
+            if (!cookieConsent) {
+                setTimeout(() => {
+                    document.getElementById('cookie-modal').classList.add('show');
+                }, 1000);
+            }
+        });
+
+        // Accepter tous les cookies
+        document.getElementById('accept-all-cookies').addEventListener('click', function() {
+            setCookie('cookie_consent', 'all', 365);
+            setCookie('analytics_cookies', 'true', 365);
+            setCookie('marketing_cookies', 'true', 365);
+            document.getElementById('cookie-modal').classList.remove('show');
+        });
+
+        // Refuser tous les cookies (sauf essentiels)
+        document.getElementById('refuse-all-cookies').addEventListener('click', function() {
+            setCookie('cookie_consent', 'essential', 365);
+            setCookie('analytics_cookies', 'false', 365);
+            setCookie('marketing_cookies', 'false', 365);
+            document.getElementById('cookie-modal').classList.remove('show');
+        });
+
+        // Ouvrir les paramètres
+        document.getElementById('open-cookie-settings').addEventListener('click', function() {
+            document.getElementById('cookie-modal').classList.remove('show');
+            document.getElementById('cookie-overlay').classList.add('show');
+            document.getElementById('cookie-settings-modal').classList.add('show');
+            
+            // Charger les préférences existantes
+            const analyticsCookie = getCookie('analytics_cookies');
+            const marketingCookie = getCookie('marketing_cookies');
+            
+            if (analyticsCookie === 'true') {
+                document.getElementById('analytics-cookies').checked = true;
+            }
+            if (marketingCookie === 'true') {
+                document.getElementById('marketing-cookies').checked = true;
+            }
+        });
+
+        // Fermer les paramètres (annuler)
+        document.getElementById('cancel-settings').addEventListener('click', function() {
+            document.getElementById('cookie-settings-modal').classList.remove('show');
+            document.getElementById('cookie-overlay').classList.remove('show');
+            document.getElementById('cookie-modal').classList.add('show');
+        });
+
+        // Fermer en cliquant sur l'overlay
+        document.getElementById('cookie-overlay').addEventListener('click', function() {
+            document.getElementById('cookie-settings-modal').classList.remove('show');
+            document.getElementById('cookie-overlay').classList.remove('show');
+            document.getElementById('cookie-modal').classList.add('show');
+        });
+
+        // Enregistrer les paramètres personnalisés
+        document.getElementById('save-settings').addEventListener('click', function() {
+            const analyticsChecked = document.getElementById('analytics-cookies').checked;
+            const marketingChecked = document.getElementById('marketing-cookies').checked;
+            
+            setCookie('cookie_consent', 'custom', 365);
+            setCookie('analytics_cookies', analyticsChecked.toString(), 365);
+            setCookie('marketing_cookies', marketingChecked.toString(), 365);
+            
+            document.getElementById('cookie-settings-modal').classList.remove('show');
+            document.getElementById('cookie-overlay').classList.remove('show');
+        });
+    </script>
+</body>
+</html>

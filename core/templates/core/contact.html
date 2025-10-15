@@ -1,0 +1,747 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Contact - Cabinet Konsey{% endblock %}
+
+{% block content %}
+<style>
+    /* Styles pour la page Contact - Design 3D ultra moderne */
+    :root {
+        --primary-red: #b30000;
+        --dark-black: #111111;
+        --white: #ffffff;
+        --gray-light: #f8f9fa;
+        --shadow-3d: 0 20px 60px rgba(0, 0, 0, 0.15);
+        --shadow-3d-hover: 0 30px 80px rgba(179, 0, 0, 0.25);
+        --gradient-red: linear-gradient(135deg, #b30000 0%, #8b0000 100%);
+        --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        --border-radius: 20px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Hero Section 3D */
+    .contact-hero {
+        min-height: 50vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(179, 0, 0, 0.85) 0%, rgba(17, 17, 17, 0.75) 100%);
+        z-index: 1;
+    }
+
+    .hero-overlay::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        animation: floatBubbles 20s ease-in-out infinite;
+    }
+
+    @keyframes floatBubbles {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(-50px, -50px) rotate(120deg); }
+        66% { transform: translate(50px, 50px) rotate(240deg); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 2rem;
+        animation: heroFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes heroFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .hero-content h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 800;
+        color: var(--white);
+        margin-bottom: 1.5rem;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        letter-spacing: 3px;
+        animation: slideInDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+        background: linear-gradient(to right, #fff, #ffdddd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-100px) scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .hero-content p {
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        animation: slideInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Container principal avec perspective 3D */
+    .contact-container {
+        padding: 6rem 1rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+        perspective: 2000px;
+        min-height: 80vh;
+    }
+
+    /* Grid 3D */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    /* Cartes 3D avec glassmorphism */
+    .contact-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        border-radius: var(--border-radius);
+        padding: 3rem;
+        box-shadow: var(--shadow-3d);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: var(--transition);
+        transform-style: preserve-3d;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Effet de brillance animé */
+    .contact-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 70%
+        );
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .contact-card:hover {
+        transform: translateY(-15px) rotateX(5deg);
+        box-shadow: var(--shadow-3d-hover);
+    }
+
+    /* Infos card avec icônes 3D */
+    .contact-info h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        color: var(--primary-red);
+        margin-bottom: 2.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-info h2 i {
+        font-size: 2.5rem;
+        background: var(--gradient-red);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.15) rotate(10deg); }
+    }
+
+    /* Items de contact avec hover 3D */
+    .contact-item {
+        margin-bottom: 2.5rem;
+        padding: 1.5rem;
+        background: rgba(179, 0, 0, 0.03);
+        border-radius: 15px;
+        transition: var(--transition);
+        transform-style: preserve-3d;
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-item:hover {
+        background: rgba(179, 0, 0, 0.08);
+        transform: translateX(10px) rotateY(-5deg);
+        box-shadow: -10px 10px 30px rgba(179, 0, 0, 0.15);
+    }
+
+    .contact-item h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.2rem;
+        color: var(--primary-red);
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .contact-item h3 i {
+        font-size: 1.4rem;
+        animation: iconBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes iconBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+
+    .contact-item a {
+        color: #333;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: var(--transition);
+        display: inline-block;
+    }
+
+    .contact-item a:hover {
+        color: var(--primary-red);
+        transform: translateX(5px);
+    }
+
+    /* Formulaire avec animations 3D */
+    .contact-form h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        color: var(--primary-red);
+        margin-bottom: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-form h2 i {
+        font-size: 2.5rem;
+        animation: paperPlane 3s ease-in-out infinite;
+    }
+
+    @keyframes paperPlane {
+        0%, 100% { transform: translateX(0) rotate(0deg); }
+        25% { transform: translateX(10px) rotate(-10deg); }
+        75% { transform: translateX(-10px) rotate(10deg); }
+    }
+
+    /* Alert avec animation d'entrée */
+    .alert-info {
+        background: linear-gradient(135deg, rgba(179, 0, 0, 0.1), rgba(179, 0, 0, 0.05));
+        border-left: 4px solid var(--primary-red);
+        padding: 1.2rem 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        z-index: 1;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .alert-info strong {
+        color: var(--primary-red);
+        font-weight: 700;
+    }
+
+    /* Inputs avec effet 3D */
+    .form-contact {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-contact input,
+    .form-contact textarea {
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        border: 2px solid rgba(179, 0, 0, 0.1);
+        border-radius: 12px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        transition: var(--transition);
+        transform-style: preserve-3d;
+    }
+
+    .form-contact input:focus,
+    .form-contact textarea:focus {
+        outline: none;
+        border-color: var(--primary-red);
+        background: var(--white);
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(179, 0, 0, 0.15);
+    }
+
+    .form-contact input::placeholder,
+    .form-contact textarea::placeholder {
+        color: #999;
+        font-weight: 400;
+    }
+
+    /* Bouton submit avec effet 3D et particules */
+    .btn-submit {
+        background: var(--gradient-red);
+        color: var(--white);
+        padding: 1.3rem 3rem;
+        border: none;
+        border-radius: 50px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: 0 10px 30px rgba(179, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-submit::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-submit:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-8px) scale(1.05) rotateX(10deg);
+        box-shadow: 0 20px 50px rgba(179, 0, 0, 0.4);
+    }
+
+    .btn-submit:active {
+        transform: translateY(-2px) scale(0.98);
+    }
+
+    .btn-submit i {
+        margin-left: 0.8rem;
+        transition: var(--transition);
+    }
+
+    .btn-submit:hover i {
+        transform: translateX(10px) rotate(45deg);
+    }
+
+    /* Particules flottantes en arrière-plan */
+    .particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--primary-red);
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: floatParticle 15s infinite ease-in-out;
+    }
+
+    @keyframes floatParticle {
+        0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.3;
+        }
+        50% {
+            transform: translate(var(--x), var(--y)) scale(1.5);
+            opacity: 0.6;
+        }
+    }
+
+    .particle:nth-child(1) { left: 10%; top: 20%; --x: 50px; --y: -100px; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 30%; top: 60%; --x: -80px; --y: 120px; animation-delay: 2s; }
+    .particle:nth-child(3) { left: 70%; top: 30%; --x: 100px; --y: -80px; animation-delay: 4s; }
+    .particle:nth-child(4) { left: 90%; top: 70%; --x: -120px; --y: 90px; animation-delay: 6s; }
+    .particle:nth-child(5) { left: 50%; top: 10%; --x: -60px; --y: 150px; animation-delay: 8s; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .contact-card {
+            padding: 2rem;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px) rotateX(0deg);
+        }
+
+        .contact-item:hover {
+            transform: translateX(5px) rotateY(0deg);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact-hero {
+            min-height: 40vh;
+            background-attachment: scroll;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .contact-container {
+            padding: 4rem 0.5rem;
+        }
+
+        .contact-info h2,
+        .contact-form h2 {
+            font-size: 1.6rem;
+        }
+
+        .contact-card {
+            padding: 1.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .contact-item {
+            padding: 1rem;
+        }
+
+        .contact-item h3 {
+            font-size: 1.1rem;
+        }
+
+        .form-contact input,
+        .form-contact textarea {
+            padding: 1rem;
+        }
+    }
+
+    /* Animation d'apparition des cartes */
+    @keyframes cardAppear {
+        from {
+            opacity: 0;
+            transform: translateY(50px) rotateX(-20deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+    }
+
+    .contact-info {
+        animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+
+    .contact-form {
+        animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+    }
+
+    /* Focus pour accessibilité */
+    .btn-submit:focus,
+    .form-contact input:focus,
+    .form-contact textarea:focus {
+        outline: 3px solid var(--primary-red);
+        outline-offset: 3px;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="contact-hero" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 data-fr="Contactez-nous" data-en="Contact Us">Contactez-nous</h1>
+        <p data-fr="Nous sommes à votre écoute pour tous vos besoins en droit et RH." data-en="We are at your service for all your legal and HR needs.">Nous sommes à votre écoute pour tous vos besoins en droit et RH.</p>
+    </div>
+</section>
+
+<!-- Section Contact avec particules -->
+<section class="contact-container">
+    <!-- Particules flottantes -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="contact-grid">
+        <!-- Carte Infos avec effet 3D -->
+        <div class="contact-card contact-info">
+            <h2><i class="fas fa-map-marker-alt"></i> <span data-fr="Nos Coordonnées" data-en="Our Contact Information">Nos Coordonnées</span></h2>
+            
+            <div class="contact-item">
+                <h3><i class="fas fa-phone"></i> <span data-fr="Téléphone" data-en="Phone">Téléphone</span></h3>
+                <a href="tel:+221710407216">+221 71 040 72 16</a><br>
+                <a href="tel:+221703298912">+221 70 329 89 12</a>
+            </div>
+            
+            <div class="contact-item">
+                <h3><i class="fas fa-envelope"></i> Email</h3>
+                <a href="mailto:contact@cabinetkonsey.sn">contact@cabinetkonsey.sn</a>
+            </div>
+            
+            <div class="contact-item">
+                <h3><i class="fas fa-home"></i> <span data-fr="Adresse" data-en="Address">Adresse</span></h3>
+                <p style="margin: 0; color: #333; font-size: 1.1rem;">Médina – Dakar / Sénégal</p>
+            </div>
+        </div>
+
+        <!-- Carte Formulaire avec effet 3D -->
+        <div class="contact-card contact-form">
+            <h2><i class="fas fa-paper-plane"></i> <span data-fr="Envoyez-nous un message" data-en="Send us a message">Envoyez-nous un message</span></h2>
+
+            {% if request.GET.service %}
+            <div class="alert-info">
+                <span data-fr="Vous souhaitez plus d'informations sur le service :" data-en="You want more information about the service:">Vous souhaitez plus d'informations sur le service :</span> <strong>{{ request.GET.service }}</strong>
+            </div>
+            {% endif %}
+
+            <form method="post" class="form-contact">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Votre nom complet" data-placeholder-fr="Votre nom complet" data-placeholder-en="Your full name" required>
+                <input type="email" name="email" placeholder="Votre adresse email" data-placeholder-fr="Votre adresse email" data-placeholder-en="Your email address" required>
+                <input type="text" name="subject" placeholder="Sujet de votre message" data-placeholder-fr="Sujet de votre message" data-placeholder-en="Subject of your message" required value="{% if request.GET.service %}Demande d'information - {{ request.GET.service }}{% endif %}">
+                <textarea name="message" rows="6" placeholder="Votre message..." data-placeholder-fr="Votre message..." data-placeholder-en="Your message..." required></textarea>
+                
+                {% if request.GET.service %}
+                    <input type="hidden" name="service" value="{{ request.GET.service }}">
+                {% endif %}
+
+                <button type="submit" class="btn-submit">
+                    <span data-fr="Envoyer le message" data-en="Send message">Envoyer le message</span> <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Animations et interactions avancées
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animation des cartes au scroll
+        const cards = document.querySelectorAll('.contact-card');
+        
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) rotateX(0deg)';
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => observer.observe(card));
+
+        // Effet 3D sur les cartes au mouvement de la souris
+        cards.forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `translateY(-15px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg)';
+            });
+        });
+
+        // Animation du bouton submit
+        const submitBtn = document.querySelector('.btn-submit');
+        
+        submitBtn.addEventListener('click', function(e) {
+            // Effet de ripple
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            ripple.style.animation = 'ripple 0.6s ease-out';
+            
+            const rect = submitBtn.getBoundingClientRect();
+            ripple.style.left = (e.clientX - rect.left - 10) + 'px';
+            ripple.style.top = (e.clientY - rect.top - 10) + 'px';
+            
+            submitBtn.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Validation en temps réel avec feedback visuel
+        const inputs = document.querySelectorAll('.form-contact input, .form-contact textarea');
+        
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = '#28a745';
+                    this.style.boxShadow = '0 0 20px rgba(40, 167, 69, 0.2)';
+                } else if (this.hasAttribute('required')) {
+                    this.style.borderColor = '#dc3545';
+                    this.style.boxShadow = '0 0 20px rgba(220, 53, 69, 0.2)';
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                this.style.borderColor = 'var(--primary-red)';
+                this.style.boxShadow = '0 15px 40px rgba(179, 0, 0, 0.15)';
+            });
+        });
+
+        // Animation des icônes au scroll
+        const icons = document.querySelectorAll('.contact-item h3 i');
+        
+        icons.forEach((icon, index) => {
+            setTimeout(() => {
+                icon.style.animation = 'iconBounce 2s ease-in-out infinite';
+            }, index * 200);
+        });
+
+        // Traduction des placeholders des inputs
+        function updatePlaceholders() {
+            const lang = localStorage.getItem('language') || 'fr';
+            inputs.forEach(input => {
+                const placeholderAttr = input.getAttribute(`data-placeholder-${lang}`);
+                if (placeholderAttr) {
+                    input.placeholder = placeholderAttr;
+                }
+            });
+        }
+
+        // Appeler au chargement et à chaque changement de langue
+        updatePlaceholders();
+        
+        // Observer les changements dans localStorage pour la langue
+        window.addEventListener('storage', updatePlaceholders);
+        
+        // Écouter le clic sur le bouton de langue
+        const langSwitcher = document.getElementById('languageSwitcher');
+        if (langSwitcher) {
+            langSwitcher.addEventListener('click', function() {
+                setTimeout(updatePlaceholders, 100);
+            });
+        }
+    });
+
+    // Animation de ripple CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+{% endblock %}
