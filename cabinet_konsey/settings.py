@@ -13,7 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -----------------------------
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key')
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # True pour local, False sur Render
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1', 'cabinetkonsey.sn', 'www.cabinetkonsey.sn']
+
 
 # -----------------------------
 # Applications
