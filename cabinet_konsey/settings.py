@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import dj_database_url
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # -----------------------------
@@ -79,7 +80,7 @@ else:
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get('DATABASE_URL', 'postgresql://konseydk_db_user:bXrsuhHmDURCMtxiDdQpMfsfNJq2J8O1@dpg-d3k1hqjipnbc73a33tpg-a/konseydk_db'),
-            conn_max_age=600,a
+            conn_max_age=600,
             ssl_require=True
         )
     }
