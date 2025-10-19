@@ -67,7 +67,7 @@ WSGI_APPLICATION = 'cabinet_konsey.wsgi.application'
 # Base de données
 # -----------------------------
 if DEBUG:
-    # Base locale (SQLite)
+    # Base locale (SQLite) pour le développement
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -75,11 +75,11 @@ if DEBUG:
         }
     }
 else:
-    # Base Render (PostgreSQL)
+    # Base de données PostgreSQL en production (Render, OVH ou autre)
     DATABASES = {
         'default': dj_database_url.config(
-            default='postgresql://konseydk_db_user:bXrsuhHmDURCMtxiDdQpMfsfNJq2J8O1@dpg-d3k1hqjipnbc73a33tpg-a/konseydk_db',
-            conn_max_age=600,
+            default=os.environ.get('DATABASE_URL', 'postgresql://konseydk_db_user:bXrsuhHmDURCMtxiDdQpMfsfNJq2J8O1@dpg-d3k1hqjipnbc73a33tpg-a/konseydk_db'),
+            conn_max_age=600,a
             ssl_require=True
         )
     }
