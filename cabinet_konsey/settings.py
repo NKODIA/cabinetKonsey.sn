@@ -77,14 +77,15 @@ if DEBUG:
     }
 else:
     # Base de données PostgreSQL en production (Render, OVH ou autre)
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL', 'postgresql://konseydk_db_user:bXrsuhHmDURCMtxiDdQpMfsfNJq2J8O1@dpg-d3k1hqjipnbc73a33tpg-a/konseydk_db'),
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
+   import dj_database_url
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default="postgresql://konseydk_db_r12j_user:dGYaQWZdkDGEjVMu0yJlwKWVgKhT2Hd0@dpg-d4ss4h75r7bs73eeqlt0-a.oregon-postgres.render.com/konseydk_db_r12j",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 # -----------------------------
 # Validation des mots de passe
 # -----------------------------
