@@ -12,12 +12,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -----------------------------
 # Sécurité
 # -----------------------------
+import os
+
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key')
 
-# Force le mode production si tu ne peux pas utiliser les variables d'environnement
-DEBUG = False  # Toujours False sur Render / site en ligne
+# Détecte si on est en local ou en ligne
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # True local, False en ligne
 
-ALLOWED_HOSTS = ['.onrender.com', 'cabinetkonsey.sn', 'www.cabinetkonsey.sn']
+# ALLOWED_HOSTS
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['.onrender.com', 'cabinetkonsey.sn', 'www.cabinetkonsey.sn']
 
 # -----------------------------
 # Applications
@@ -79,12 +85,12 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk",
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
+    'default': dj_database_url.config(
+        default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 # -----------------------------
 # Validation des mots de passe
 # -----------------------------
