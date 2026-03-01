@@ -67,8 +67,8 @@ WSGI_APPLICATION = 'cabinet_konsey.wsgi.application'
 # -----------------------------
 # Base de données
 # -----------------------------
+
 if DEBUG:
-    # Base locale (SQLite) pour le développement
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -76,16 +76,13 @@ if DEBUG:
         }
     }
 else:
-    # Base de données PostgreSQL en production (Render, OVH ou autre)
-   import dj_database_url
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk',",
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+    DATABASES = {
+        'default': dj_database_url.config(
+            default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk",
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 # -----------------------------
 # Validation des mots de passe
 # -----------------------------
