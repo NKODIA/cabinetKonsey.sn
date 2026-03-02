@@ -7,8 +7,12 @@ from pathlib import Path
 import dj_database_url
 from decouple import config  # pip install python-decouple
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-temp-key')
+
+DEBUG = config('DEBUG', default=True, cast=bool)
 # -----------------------------
 # Sécurité
 # -----------------------------
