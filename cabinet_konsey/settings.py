@@ -5,23 +5,21 @@ Django settings for cabinet_konsey project.
 import os
 from pathlib import Path
 import dj_database_url
-from decouple import config  # pip install python-decouple
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-temp-key')
-
-DEBUG = config('DEBUG', default=True, cast=bool)
 # -----------------------------
 # Sécurité
 # -----------------------------
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-temp-key')
-DEBUG = config('DEBUG', default=True, cast=bool)
+import os
 
-# -----------------------------
-# ALLOWED HOSTS
-# -----------------------------
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key')
+
+# Détecte si on est en local ou en ligne
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # True local, False en ligne
+
+# ALLOWED_HOSTS
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
@@ -77,6 +75,7 @@ WSGI_APPLICATION = 'cabinet_konsey.wsgi.application'
 # -----------------------------
 # Base de données
 # -----------------------------
+
 if DEBUG:
     DATABASES = {
         'default': {
@@ -86,13 +85,12 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=config('DATABASE_URL'),
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
-
+    'default': dj_database_url.config(
+        default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 # -----------------------------
 # Validation des mots de passe
 # -----------------------------
@@ -112,7 +110,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LANGUAGES = [('fr', 'Français'), ('en', 'English')]
+LANGUAGES = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+]
+
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
 # -----------------------------
@@ -121,6 +123,7 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
