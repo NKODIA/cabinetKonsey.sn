@@ -6,20 +6,15 @@ import os
 from pathlib import Path
 import dj_database_url
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # -----------------------------
 # Sécurité
 # -----------------------------
-import os
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key-change-in-production')
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temp-key')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# Détecte si on est en local ou en ligne
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # True local, False en ligne
-
-# ALLOWED_HOSTS
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
@@ -75,8 +70,8 @@ WSGI_APPLICATION = 'cabinet_konsey.wsgi.application'
 # -----------------------------
 # Base de données
 # -----------------------------
-
 if DEBUG:
+    # Base locale en développement
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -84,13 +79,15 @@ if DEBUG:
         }
     }
 else:
+    # Base Render en production
     DATABASES = {
-    'default': dj_database_url.config(
-        default="postgresql://konseydk_db_mfpk_user:Aqkcdl5whhUB1POSRspzycLpbu9t9puR@dpg-d6hebjdm5p6s73bi0o8g-a.oregon-postgres.render.com/konseydk_db_mfpk",
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+
 # -----------------------------
 # Validation des mots de passe
 # -----------------------------
